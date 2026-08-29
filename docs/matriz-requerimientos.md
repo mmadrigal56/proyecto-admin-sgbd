@@ -7,8 +7,8 @@
 | Proyecto | Sistema de monitoreo y administración de SGBD |
 | Repositorio | `proyecto-admin-sgbd` |
 | SGBD seleccionado | Microsoft SQL Server |
-| Interfaz consultiva | Power BI |
-| Arquitectura | SQL Server, consultas administrativas, Power BI y componente administrativo |
+| Interfaz | Aplicación web local desarrollada con Python y Streamlit |
+| Arquitectura | SQL Server, consultas administrativas y aplicación modular en Python |
 | Estado del documento | En elaboración |
 | Última actualización | 29 de agosto de 2026 |
 
@@ -38,11 +38,11 @@ Los módulos definidos son:
 
 | ID | Requerimiento | Solución definida | Criterio de aceptación | Estado |
 |---|---|---|---|---|
-| IG-01 | La solución debe iniciar correctamente | Power BI y componente administrativo configurados | La solución se ejecuta sin errores graves | Pendiente |
+| IG-01 | La solución debe iniciar correctamente | Aplicación web local desarrollada con Streamlit | La solución se ejecuta sin errores graves | Pendiente |
 | IG-02 | Conectarse directamente con el SGBD | Conector de Microsoft SQL Server | Se ejecuta una consulta real desde la solución | Pendiente |
 | IG-03 | Integrar los seis módulos requeridos | Navegación organizada entre los módulos | Se puede acceder a todos los módulos | Pendiente |
 | IG-04 | Utilizar información real | Consultas administrativas ejecutadas sobre SQL Server | Los resultados proceden de la instancia configurada | Pendiente |
-| IG-05 | Mantener separadas las operaciones consultivas y administrativas | Usuario consultivo para Power BI y usuario administrativo para mantenimiento | Power BI no almacena ni utiliza credenciales administrativas | Pendiente |
+| IG-07 | Separar las operaciones consultivas y administrativas | Conexiones o usuarios con permisos diferentes según la operación | Las consultas utilizan permisos limitados y el mantenimiento solo utiliza los permisos administrativos necesarios | Pendiente |
 
 ## Módulo 1: estado general de la instancia
 
@@ -160,7 +160,7 @@ Los módulos definidos son:
 | ID | Requerimiento | Criterio de aceptación | Estado |
 |---|---|---|---|
 | DOC-01 | Documentar la arquitectura de la solución | Explica los componentes de presentación, lógica y acceso a datos, así como sus relaciones | En proceso |
-| DOC-02 | Documentar las decisiones de diseño | Justifica la selección de SQL Server, Power BI, Python y la organización modular | En proceso |
+| DOC-02 | Documentar las decisiones de diseño | Justifica la selección de SQL Server, Python, Streamlit y la organización modular | En proceso |
 | DOC-03 | Crear un manual de instalación | Permite preparar el entorno, instalar dependencias y configurar la conexión | Pendiente |
 | DOC-04 | Crear un manual de ejecución | Explica cómo iniciar Power BI, el componente de Python y los demás elementos necesarios | Pendiente |
 | DOC-05 | Crear un manual técnico | Explica las consultas, vistas, procedimientos, permisos, configuración y estructura del código | Pendiente |
