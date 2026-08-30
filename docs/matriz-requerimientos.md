@@ -125,27 +125,27 @@ Los módulos definidos son:
 
 ## Requerimientos no funcionales
 
-| ID | Requerimiento | Criterio de aceptación | Puntos | Estado |
-|---|---|---|---:|---|
-| RNF-01 | Usabilidad y navegación | La interfaz permite localizar y utilizar los módulos sin instrucciones adicionales complejas | 1 | Pendiente |
-| RNF-02 | Calidad visual | Existe consistencia en títulos, controles, tablas, gráficos, unidades y mensajes | 1 | Pendiente |
-| RNF-03 | Organización modular del código | El código separa adecuadamente la interfaz, la conexión, las consultas y la lógica de la aplicación | 1 | Pendiente |
-| RNF-04 | Nombres y legibilidad | Se utilizan nombres descriptivos y una estructura comprensible | 1 | Pendiente |
-| RNF-05 | Rendimiento de las consultas | Las consultas se ejecutan en tiempos razonables y evitan extraer información innecesaria | 1 | Pendiente |
-| RNF-06 | Robustez | La solución maneja errores de conexión, consultas sin resultados y operaciones fallidas | 1 | Pendiente |
-| RNF-07 | Configuración y portabilidad | Los parámetros de conexión y las dependencias pueden configurarse sin modificar múltiples partes del código | 1 | Pendiente |
-| RNF-08 | Protección de información sensible | No existen credenciales reales en el código, la documentación ni el historial del repositorio | 1 | Pendiente |
+| ID | Requerimiento | Criterio de aceptación | Estado |
+|---|---|---|---|
+| RNF-01 | Usabilidad y navegación | La interfaz permite localizar y utilizar los módulos sin instrucciones adicionales complejas | Pendiente |
+| RNF-02 | Calidad visual | Existe consistencia en títulos, controles, tablas, gráficos, unidades y mensajes | Pendiente |
+| RNF-03 | Organización modular del código | El código separa adecuadamente la interfaz, la conexión, las consultas y la lógica de la aplicación | Pendiente |
+| RNF-04 | Nombres y legibilidad | Se utilizan nombres descriptivos y una estructura comprensible | Pendiente |
+| RNF-05 | Rendimiento de las consultas | Las consultas se ejecutan en tiempos razonables y evitan extraer información innecesaria | Pendiente |
+| RNF-06 | Robustez | La solución maneja errores de conexión, consultas sin resultados y operaciones fallidas | Pendiente |
+| RNF-07 | Configuración y portabilidad | Los parámetros de conexión y las dependencias pueden configurarse sin modificar múltiples partes del código | Pendiente |
+| RNF-08 | Protección de información sensible | No existen credenciales reales en el código, la documentación ni el historial del repositorio | Pendiente |
 
 ## Repositorio y trabajo colaborativo
 
-| ID | Requerimiento | Criterio de aceptación | Puntos | Estado |
-|---|---|---|---:|---|
-| REP-01 | Mantener un repositorio accesible y completo | El enlace funciona y contiene el código, los scripts, la documentación y la presentación | 1 | En proceso |
-| REP-02 | Evidenciar un historial progresivo | Los cambios se distribuyen durante el periodo de desarrollo y no se concentran únicamente al final | 2 | En proceso |
-| REP-03 | Identificar los aportes individuales | Los commits permiten reconocer claramente a la persona responsable de cada cambio | 1 | Pendiente |
-| REP-04 | Garantizar la participación del grupo | Todos los integrantes presentan aportes relevantes y verificables | 2 | Pendiente |
-| REP-05 | Utilizar mensajes de commit claros | Los mensajes describen las funcionalidades, correcciones o documentos incorporados | 1 | En proceso |
-| REP-06 | Mantener organizado el repositorio | Las carpetas, los archivos, la rama principal y la versión final se encuentran ordenados | 1 | En proceso |
+| ID | Requerimiento | Criterio de aceptación | Estado |
+|---|---|---|---|
+| REP-01 | Mantener un repositorio accesible y completo | El enlace funciona y contiene el código, los scripts, la documentación y la presentación | En proceso |
+| REP-02 | Evidenciar un historial progresivo | Los cambios se distribuyen durante el periodo de desarrollo y no se concentran únicamente al final | En proceso |
+| REP-03 | Identificar los aportes individuales | Los commits permiten reconocer claramente a la persona responsable de cada cambio | Pendiente |
+| REP-04 | Garantizar la participación del grupo | Todos los integrantes presentan aportes relevantes y verificables | Pendiente |
+| REP-05 | Utilizar mensajes de commit claros | Los mensajes describen las funcionalidades, correcciones o documentos incorporados | En proceso |
+| REP-06 | Mantener organizado el repositorio | Las carpetas, los archivos, la rama principal y la versión final se encuentran ordenados | En proceso |
 
 ### Reglas del repositorio
 
