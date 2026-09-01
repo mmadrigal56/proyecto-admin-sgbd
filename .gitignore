@@ -1,0 +1,34 @@
+﻿# Entorno virtual de Python
+.venv/
+
+# Variables de entorno y credenciales
+.env
+.env.*
+!.env.example
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+
+# Archivos generados por herramientas de desarrollo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Configuración local de IDE
+.vscode/
+.idea/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos locales de SQL Server
+*.mdf
+*.ndf
+*.ldf
