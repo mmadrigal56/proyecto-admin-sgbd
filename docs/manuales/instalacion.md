@@ -178,6 +178,35 @@ streamlit run app/app.py
 
 Streamlit iniciará el servidor local de la aplicación y mostrará la dirección disponible en la terminal.
 
+## 11.1 Preparar el Módulo 3 (almacenamiento)
+
+Ejecutar en SSMS **como administrador** (autenticación de Windows), en este orden y una sola vez por máquina:
+
+1. `sql/03-almacenamiento/01_crear_objetos_historial.sql` — crea el esquema `monitoreo`, la tabla de historial, el procedimiento de captura y la vista resumen.
+2. `sql/03-almacenamiento/02_otorgar_permisos_almacenamiento.sql` — da al usuario consultivo `VIEW DEFINITION`, `SELECT` sobre `monitoreo` y `EXECUTE` sobre el procedimiento de captura.
+3. (Opcional, para la demostración) `sql/03-almacenamiento/03_generar_carga_prueba.sql` — agrega filas reales a una tabla de prueba para que exista crecimiento que medir.
+
+### Captura periódica (Programador de tareas de Windows)
+
+SQL Server Express no incluye SQL Server Agent, así que las mediciones automáticas se programan en Windows. Desde PowerShell, en la raíz del repositorio y con el entorno virtual ya creado:
+
+```powershell
+# Probar primero a mano (debe imprimir una línea "OK | BD_AdminSGBD | ...")
+.venv\Scripts\python.exe scripts\capturar_almacenamiento.py
+
+# Crear la tarea: una medición cada 6 horas mientras la sesión de Windows esté iniciada.
+# StartWhenAvailable: si la computadora estaba apagada a la hora programada, la ejecuta al encender.
+$accion     = New-ScheduledTaskAction -Execute "$PWD\scripts\capturar_almacenamiento.bat"
+$disparador = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Hours 6)
+$ajustes    = New-ScheduledTaskSettingsSet -StartWhenAvailable
+Register-ScheduledTask -TaskName "ProyectoSGBD_CapturaAlmacenamiento" -Action $accion -Trigger $disparador -Settings $ajustes
+
+# Ejecutarla una vez para comprobar
+Start-ScheduledTask -TaskName "ProyectoSGBD_CapturaAlmacenamiento"
+```
+
+Cada ejecución deja una línea en `logs/captura_almacenamiento.log` (ignorado por Git). Para eliminar la tarea: `Unregister-ScheduledTask -TaskName "ProyectoSGBD_CapturaAlmacenamiento"`.
+
 ## 12. Solución de problemas comunes
 
 ### Error: no se encuentra el driver ODBC

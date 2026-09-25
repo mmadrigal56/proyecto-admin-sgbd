@@ -1,0 +1,34 @@
+Semana 5 - Salidas reales de terminal (equipo de Juan, 2026-09-24)
+
+> python test_connection.py
+Conexión exitosa.
+Servidor: Juan\SQLEXPRESS
+Base actual: BD_AdminSGBD
+Versión:
+Microsoft SQL Server 2025 (RTM) - 17.0.1000.7 (X64)
+        Oct 21 2025 12:05:57
+        Copyright (C) 2025 Microsoft Corporation
+        Express Edition (64-bit) on Windows 10 Pro 10.0 <X64> (Build 26200: ) (Hypervisor)
+
+> python test_permissions.py
+Identidad de la conexión:
+Login: adminsgbd_consulta
+Usuario: adminsgbd_consulta
+Base: BD_AdminSGBD
+
+Permisos efectivos:
+- CONNECT
+- VIEW DATABASE STATE
+
+> SELECT SERVERPROPERTY('IsIntegratedSecurityOnly')
+0  (autenticación mixta ya activa)
+
+> python scripts\capturar_almacenamiento.py   (captura manual)
+2026-09-24 21:42:08 | OK | BD_AdminSGBD | BD_AdminSGBD (ROWS): 4.38/8.00 MB; BD_AdminSGBD_log (LOG): 0.87/8.00 MB
+
+> Register-ScheduledTask -TaskName "ProyectoSGBD_CapturaAlmacenamiento" ...
+TaskName: ProyectoSGBD_CapturaAlmacenamiento   State: Ready
+
+> Start-ScheduledTask ... ; Get-Content logs\captura_almacenamiento.log
+2026-09-24 21:42:08 | OK | BD_AdminSGBD | BD_AdminSGBD (ROWS): 4.38/8.00 MB; BD_AdminSGBD_log (LOG): 0.87/8.00 MB
+2026-09-24 21:54:40 | OK | BD_AdminSGBD | BD_AdminSGBD (ROWS): 20.69/72.00 MB; BD_AdminSGBD_log (LOG): 5.34/72.00 MB

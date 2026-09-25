@@ -76,18 +76,18 @@ Los módulos definidos son:
 
 | ID | Requerimiento | Presentación propuesta | Criterio de aceptación | Estado |
 |---|---|---|---|---|
-| M3-01 | Consultar los filegroups de la base de datos | Tabla o gráfico | Se muestran los filegroups existentes | Pendiente |
-| M3-02 | Obtener el espacio total asignado | Tarjeta o tabla | Presenta el tamaño asignado con una unidad comprensible | Pendiente |
-| M3-03 | Obtener el espacio utilizado | Tarjeta o gráfico | El valor se calcula utilizando información real de SQL Server | Pendiente |
-| M3-04 | Obtener el espacio disponible | Tarjeta o gráfico | Se diferencia claramente del espacio total y utilizado | Pendiente |
-| M3-05 | Calcular el porcentaje de utilización | Indicador | El porcentaje coincide con los valores de espacio utilizado y disponible | Pendiente |
-| M3-06 | Consultar el tamaño total de la base de datos | Tarjeta | Muestra el tamaño actual de los archivos de datos y de registro | Pendiente |
-| M3-07 | Consultar los archivos de datos y de registro | Tabla | Muestra nombre lógico, tipo, ubicación y tamaño | Pendiente |
-| M3-08 | Identificar las tablas de mayor tamaño | Tabla ordenada | Presenta primero las tablas con mayor consumo | Pendiente |
-| M3-09 | Identificar los índices de mayor tamaño | Tabla ordenada | Presenta primero los índices con mayor consumo | Pendiente |
-| M3-10 | Registrar mediciones históricas del almacenamiento | Tabla propia de historial | Guarda fecha, espacio total, utilizado y disponible | Pendiente |
-| M3-11 | Automatizar o facilitar el registro de mediciones | Procedimiento o script | Puede ejecutarse periódicamente sin modificar manualmente los valores | Pendiente |
-| M3-12 | Mostrar el crecimiento histórico | Gráfico temporal | Utiliza varias mediciones reales almacenadas en fechas diferentes | Pendiente |
+| M3-01 | Consultar los filegroups de la base de datos | Tabla o gráfico | Se muestran los filegroups existentes | En proceso |
+| M3-02 | Obtener el espacio total asignado | Tarjeta o tabla | Presenta el tamaño asignado con una unidad comprensible | En proceso |
+| M3-03 | Obtener el espacio utilizado | Tarjeta o gráfico | El valor se calcula utilizando información real de SQL Server | En proceso |
+| M3-04 | Obtener el espacio disponible | Tarjeta o gráfico | Se diferencia claramente del espacio total y utilizado | En proceso |
+| M3-05 | Calcular el porcentaje de utilización | Indicador | El porcentaje coincide con los valores de espacio utilizado y disponible | En proceso |
+| M3-06 | Consultar el tamaño total de la base de datos | Tarjeta | Muestra el tamaño actual de los archivos de datos y de registro | En proceso |
+| M3-07 | Consultar los archivos de datos y de registro | Tabla | Muestra nombre lógico, tipo, ubicación y tamaño | En proceso |
+| M3-08 | Identificar las tablas de mayor tamaño | Tabla ordenada | Presenta primero las tablas con mayor consumo | En proceso |
+| M3-09 | Identificar los índices de mayor tamaño | Tabla ordenada | Presenta primero los índices con mayor consumo | En proceso |
+| M3-10 | Registrar mediciones históricas del almacenamiento | Tabla propia de historial | Guarda fecha, espacio total, utilizado y disponible | En proceso |
+| M3-11 | Automatizar o facilitar el registro de mediciones | Procedimiento o script | Puede ejecutarse periódicamente sin modificar manualmente los valores | En proceso |
+| M3-12 | Mostrar el crecimiento histórico | Gráfico temporal | Utiliza varias mediciones reales almacenadas en fechas diferentes | En proceso |
 
 ## Módulo 4: respaldos
 
