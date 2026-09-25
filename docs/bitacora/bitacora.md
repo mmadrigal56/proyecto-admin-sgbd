@@ -109,35 +109,42 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 
 ### Semana 5 — Módulo 3: gestión del almacenamiento
 
-**Periodo:** [COMPLETAR fecha inicio] – [COMPLETAR fecha cierre]  
+**Periodo:** 24 – 25 de septiembre de 2026  
 **Responsable:** Juan Artavia
 
 **Actividades realizadas**
 
-- Se crearon los scripts de `sql/03-almacenamiento/`: objetos del historial (`01_crear_objetos_historial.sql`), permisos (`02_otorgar_permisos_almacenamiento.sql`), carga de prueba (`03_generar_carga_prueba.sql`) y consultas documentadas (`consultas_almacenamiento.sql`).
-- Se creó el esquema `monitoreo` con la tabla `monitoreo.HistorialAlmacenamiento`, el procedimiento `monitoreo.sp_capturar_almacenamiento` y la vista `monitoreo.vw_resumen_historial`.
-- Se implementó la capa de datos `app/database/queries/almacenamiento.py`, la capa de lógica `app/services/almacenamiento.py` (umbrales y advertencias) y la página `app/pages/3_Almacenamiento.py`.
-- Se creó el mecanismo de captura periódica `scripts/capturar_almacenamiento.py` + `scripts/capturar_almacenamiento.bat`, programado con el Programador de tareas de Windows.
+- Se prepararon en la máquina de Juan (`Juan\SQLEXPRESS`, SQL Server 2025 Express 17.0.1000.7) la base `BD_AdminSGBD`, el usuario consultivo y el permiso `VIEW SERVER STATE` con los scripts de las semanas 2 y 3. Se verificaron los módulos 1 y 2 heredados.
+- Se crearon y ejecutaron los scripts de `sql/03-almacenamiento/`: objetos del historial, permisos, carga de prueba y consultas documentadas.
+- Se implementaron `app/database/queries/almacenamiento.py`, `app/services/almacenamiento.py` y `app/pages/3_Almacenamiento.py`.
+- Se creó la captura periódica (`scripts/capturar_almacenamiento.py` + `.bat`) y la tarea `ProyectoSGBD_CapturaAlmacenamiento` en el Programador de tareas de Windows (cada 6 horas).
+- Se generó crecimiento real con 20 000 filas: datos utilizados 4.38 → 20.69 MB (+16.31 MB); tamaño asignado total 16 → 144 MB por autocrecimiento de 64 MB en datos y log.
+- Se probó el manejo de errores deteniendo el servicio `SQL Server (SQLEXPRESS)`.
 
 **Decisiones tomadas**
 
-- La captura periódica se programa con el Programador de tareas de Windows porque SQL Server Express no incluye SQL Server Agent.
-- El usuario consultivo recibe `EXECUTE` solo sobre `monitoreo.sp_capturar_almacenamiento` (no `INSERT` sobre la tabla). Por encadenamiento de propiedad puede registrar mediciones calculadas por SQL Server, pero no insertar, modificar ni borrar datos del historial.
-- Se otorga `VIEW DEFINITION` en `BD_AdminSGBD` al usuario consultivo: sin él, la visibilidad de metadatos oculta las tablas e índices y la sección de objetos de mayor tamaño sale vacía.
-- Umbrales: archivo ≥ 80 % de su tamaño máximo = advertencia, ≥ 90 % = crítico; disco con < 20 % libre = advertencia, < 10 % = crítico. Un archivo con autocrecimiento ilimitado no se marca como riesgo aunque esté lleno.
-- Se agrega la carpeta `app/services/` (prevista en la estructura base del cronograma) para separar la lógica de evaluación de la presentación.
+- La captura periódica se programa con el Programador de tareas de Windows: en Express, `SQL Server Agent (SQLEXPRESS)` aparece como `Stopped` / `Disabled` (`sys.dm_server_services`).
+- El usuario consultivo recibe `EXECUTE` solo sobre `monitoreo.sp_capturar_almacenamiento`, no `INSERT` sobre la tabla (encadenamiento de propiedad).
+- Se otorga `VIEW DEFINITION` en `BD_AdminSGBD`: sin él las tablas e índices no son visibles para el usuario consultivo.
+- Umbrales: archivo ≥ 80 % de su tamaño máximo = advertencia, ≥ 90 % = crítico; disco < 20 % libre = advertencia, < 10 % = crítico.
+- La página verifica la conexión una sola vez al inicio; si falla, muestra un único error y no intenta las demás secciones.
+- Se agrega la carpeta `app/services/` para separar la lógica de evaluación de la presentación.
 
 **Problemas encontrados**
 
-- [COMPLETAR tras la prueba real]
+- Con el servidor detenido, la primera versión de la página intentaba conectarse en cada sección (~15 s de espera cada una) y el panel de indicadores quedaba vacío mientras cargaba.
+- El script de usuario consultivo se guardó por error con la contraseña local.
 
 **Soluciones aplicadas**
 
-- [COMPLETAR tras la prueba real]
+- Verificación única de conexión al inicio de la página (aviso en indicadores + un solo error).
+- `git restore sql/00-configuracion/crear_usuario_consultivo.sql` antes de cualquier commit; la contraseña solo vive en `config/.env` (ignorado por Git).
 
 **Resultados y pendientes**
 
-- [COMPLETAR: tamaño real de BD_AdminSGBD, cantidad de mediciones registradas y fechas, capturas en `evidencias/semana-05/`]
+- Módulo 3 validado contra SQL Server real; evidencias en `evidencias/semana-05/` (24 capturas + salidas de terminal).
+- 25/9: la tarea programada midió sola a las 09:55; tras una segunda carga de 20 000 filas, el historial muestra 6 mediciones en dos fechas (datos utilizados 4.38 → 32.56 MB, +28.18 MB). M3-12 completado.
+- **Semana 5 cerrada.**
 - Pendiente detectado: la Semana 4 no tiene entrada en esta bitácora (sí tiene `Nicky_semana4.md`).
 
 ## Formato para futuras entradas
