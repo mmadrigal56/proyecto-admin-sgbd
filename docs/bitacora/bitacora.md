@@ -107,6 +107,46 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - Evidencias capturadas en `evidencias/semana-03/`, incluyendo la prueba de error controlado (servicio de SQL Server detenido): las 4 secciones mostraron errores claros e independientes sin caer la aplicación, y todo volvió a la normalidad al reiniciar el servicio.
 - **Semana 3 cerrada.** Pendiente para el equipo: decidir si se fija `numpy==2.2.6` en `requirements.txt` para todos, o si se estandariza la versión de Python del equipo a 3.12+.
 
+### Semana 5 — Módulo 3: gestión del almacenamiento
+
+**Periodo:** 24 – 25 de septiembre de 2026  
+**Responsable:** Juan Artavia
+
+**Actividades realizadas**
+
+- Se prepararon en la máquina de Juan (`Juan\SQLEXPRESS`, SQL Server 2025 Express 17.0.1000.7) la base `BD_AdminSGBD`, el usuario consultivo y el permiso `VIEW SERVER STATE` con los scripts de las semanas 2 y 3. Se verificaron los módulos 1 y 2 heredados.
+- Se crearon y ejecutaron los scripts de `sql/03-almacenamiento/`: objetos del historial, permisos, carga de prueba y consultas documentadas.
+- Se implementaron `app/database/queries/almacenamiento.py`, `app/services/almacenamiento.py` y `app/pages/3_Almacenamiento.py`.
+- Se creó la captura periódica (`scripts/capturar_almacenamiento.py` + `.bat`) y la tarea `ProyectoSGBD_CapturaAlmacenamiento` en el Programador de tareas de Windows (cada 6 horas).
+- Se generó crecimiento real con 20 000 filas: datos utilizados 4.38 → 20.69 MB (+16.31 MB); tamaño asignado total 16 → 144 MB por autocrecimiento de 64 MB en datos y log.
+- Se probó el manejo de errores deteniendo el servicio `SQL Server (SQLEXPRESS)`.
+
+**Decisiones tomadas**
+
+- La captura periódica se programa con el Programador de tareas de Windows: en Express, `SQL Server Agent (SQLEXPRESS)` aparece como `Stopped` / `Disabled` (`sys.dm_server_services`).
+- El usuario consultivo recibe `EXECUTE` solo sobre `monitoreo.sp_capturar_almacenamiento`, no `INSERT` sobre la tabla (encadenamiento de propiedad).
+- Se otorga `VIEW DEFINITION` en `BD_AdminSGBD`: sin él las tablas e índices no son visibles para el usuario consultivo.
+- Umbrales: archivo ≥ 80 % de su tamaño máximo = advertencia, ≥ 90 % = crítico; disco < 20 % libre = advertencia, < 10 % = crítico.
+- La página verifica la conexión una sola vez al inicio; si falla, muestra un único error y no intenta las demás secciones.
+- Se agrega la carpeta `app/services/` para separar la lógica de evaluación de la presentación.
+
+**Problemas encontrados**
+
+- Con el servidor detenido, la primera versión de la página intentaba conectarse en cada sección (~15 s de espera cada una) y el panel de indicadores quedaba vacío mientras cargaba.
+- El script de usuario consultivo se guardó por error con la contraseña local.
+
+**Soluciones aplicadas**
+
+- Verificación única de conexión al inicio de la página (aviso en indicadores + un solo error).
+- `git restore sql/00-configuracion/crear_usuario_consultivo.sql` antes de cualquier commit; la contraseña solo vive en `config/.env` (ignorado por Git).
+
+**Resultados y pendientes**
+
+- Módulo 3 validado contra SQL Server real; evidencias en `evidencias/semana-05/` (24 capturas + salidas de terminal).
+- 25/9: la tarea programada midió sola a las 09:55; tras una segunda carga de 20 000 filas, el historial muestra 6 mediciones en dos fechas (datos utilizados 4.38 → 32.56 MB, +28.18 MB). M3-12 completado.
+- **Semana 5 cerrada.**
+- Pendiente detectado: la Semana 4 no tiene entrada en esta bitácora (sí tiene `Nicky_semana4.md`).
+
 ## Formato para futuras entradas
 
 ### Semana # — Nombre de la etapa
