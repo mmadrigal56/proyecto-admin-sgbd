@@ -147,6 +147,59 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - **Semana 5 cerrada.**
 - Pendiente detectado: la Semana 4 no tiene entrada en esta bitácora (sí tiene `Nicky_semana4.md`).
 
+### Semana 8 — Módulo 6: mantenimiento preventivo
+
+**Periodo:** 12 de octubre de 2026
+**Responsable:** Andrey
+
+**Nota de continuidad:** se revisó `Javi_semana7.md` (traspaso del Módulo 5) y el cronograma maestro, sección "Semana 8". No se encontró contradicción entre ambos documentos. También se detectó que, igual que con la Semana 2, las bitácoras de las Semanas 4, 6 y 7 no tienen entrada en este archivo (aunque sí existen `Nicky_semana4.md`, `Mar_semana6.md` y `Javi_semana7.md` en `evidencias/`); queda anotado como pendiente del equipo, no se resolvió aquí.
+
+**Actividades realizadas:**
+
+- Se sincronizó la rama local `Andrey` con `main` (Módulos 2 a 5 ya fusionados por el equipo).
+- Se creó la carpeta `sql/06-mantenimiento/` con: creación de un usuario administrativo separado (`adminsgbd_mantenimiento`, rol `db_ddladmin`, sin privilegios de sysadmin), otorgamiento de permisos de lectura al usuario consultivo (`VIEW DATABASE STATE`, `VIEW DEFINITION`, `SELECT` sobre el esquema `dbo`), tabla `monitoreo.RegistroMantenimiento`, dos procedimientos almacenados (`mantenimiento.sp_actualizar_estadisticas`, `mantenimiento.sp_reconstruir_indice`) y un script para generar un escenario de prueba real y reproducible (`dbo.PruebaMantenimiento`).
+- Se agregó `get_admin_connection()` a `app/database/connection.py`, separada de `get_connection()` (consultivo), sin modificar el comportamiento de los módulos anteriores.
+- Se creó `app/database/queries/mantenimiento.py` y `app/pages/6_Mantenimiento.py`: detección de estadísticas desactualizadas e índices fragmentados (usuario consultivo, solo lectura), y ejecución de mantenimiento con confirmación explícita (checkbox + botón) usando el usuario administrativo.
+- Se generó el escenario de prueba real: tabla con 8000 filas, fragmentación inducida por `UPDATE` dispersos (no por `DELETE`, que con clave `IDENTITY` secuencial no fragmenta de forma confiable).
+- Se validó la detección contra SQL Server real: 2 estadísticas "nunca actualizadas" y 2 índices fragmentados (93.02 % y 55.27 %, ambos con acción recomendada `REBUILD`).
+- Se ejecutó una actualización de estadísticas real (caso exitoso) y una reconstrucción de índice real (caso exitoso), verificando el estado antes y después en ambos casos.
+- Se probó un caso fallido controlado (actualizar estadísticas de una tabla inexistente) y se verificó que el error se muestra de forma clara y queda registrado.
+- Se verificó en cada caso que la operación quedó registrada en `monitoreo.RegistroMantenimiento` con fecha, operación, objeto, usuario y resultado.
+
+**Problemas encontrados**
+
+- `sys.dm_db_stats_properties` requiere, además de `VIEW DATABASE STATE`, permiso `SELECT` sobre la tabla consultada; sin él, la función devuelve 0 filas en silencio (sin error), lo que hacía parecer vacía la detección de estadísticas aunque sí había datos. `sys.dm_db_index_physical_stats` no tiene este requisito adicional, por lo que la Sección 2 (índices) funcionaba mientras la Sección 1 (estadísticas) no — eso ayudó a aislar la causa.
+- El usuario consultivo de la máquina de Andrey no tenía `VIEW DEFINITION` otorgado: ese permiso se otorgó en la Semana 5 en la máquina de Juan, pero cada integrante corre SQL Server localmente (misma lección de la Semana 3), así que nunca se propagó a esta máquina.
+- Generar fragmentación con `DELETE` sobre una clave `IDENTITY` secuencial no funciona: SQL Server sigue insertando al final, no en los huecos. Se corrigió usando `UPDATE` dispersos que alargan el valor de una columna indexada, forzando divisiones de página reales.
+- El `commit()` de pyodbc, ejecutado solo en el camino exitoso, hacía que un `ROLLBACK` automático (al salir del bloque `with` por una excepción) borrara también el `INSERT` de "Fallido" que el procedimiento ya había hecho antes de lanzar el error. El primer intento de la prueba de error controlado no quedó registrado en el historial por esta razón.
+- Al correr `python -m streamlit run app/app.py` sin haber activado antes el entorno virtual, se usó por error el Python del sistema (sin `streamlit` instalado).
+
+**Soluciones aplicadas**
+
+- Se agregó `GRANT SELECT ON SCHEMA::dbo` al usuario consultivo (además de `VIEW DATABASE STATE` y `VIEW DEFINITION`, ambos otorgados de forma idempotente) en `02_otorgar_permisos_mantenimiento.sql`, documentando la causa exacta para que el resto del equipo no repita el mismo diagnóstico.
+- Se corrigió `04_generar_escenario_prueba.sql` para fragmentar con `UPDATE` dispersos sobre una columna indexada, en vez de `DELETE`.
+- Se movió el `connection.commit()` a un bloque `finally` en `ejecutar_actualizacion_estadisticas()` y `ejecutar_mantenimiento_indice()`, para que el registro de un intento fallido se conserve siempre, incluso cuando la excepción sigue propagándose hacia Streamlit.
+- Se activó el entorno virtual (`.\.venv\Scripts\Activate.ps1`) antes de levantar la aplicación.
+
+**Decisiones tomadas:**
+
+- El usuario administrativo (`adminsgbd_mantenimiento`) se agrega solo al rol `db_ddladmin` de `BD_AdminSGBD`, no a `sysadmin`: es el permiso mínimo necesario para `UPDATE STATISTICS` y `ALTER INDEX`, sin darle control total de la instancia ni acceso a otras bases.
+- La detección (qué necesita mantenimiento) siempre corre con el usuario consultivo, de solo lectura; la ejecución (el cambio real) siempre corre con el usuario administrativo, y solo después de que la persona marque una casilla de confirmación explícita. Ningún botón ejecuta nada sin ese paso.
+- El registro de mantenimiento (`monitoreo.RegistroMantenimiento`) lo escriben los procedimientos almacenados, no la aplicación directamente, usando encadenamiento de propiedad — el usuario administrativo nunca recibe `INSERT` directo sobre la tabla, y el consultivo solo tiene `SELECT` sobre ella (mismo patrón que `sp_capturar_almacenamiento` en la Semana 5).
+- La decisión entre `REORGANIZE` y `REBUILD` la calcula la consulta de detección según el porcentaje de fragmentación (≥30 % `REBUILD`, 5–30 % `REORGANIZE`), no la persona que usa la aplicación, para evitar elegir la operación equivocada.
+
+**Resultados y pendientes**
+
+- **Validado con SQL Server real**, instancia `ANDREY-PC\SQLEXPRESS`.
+- Estadísticas: antes — 2 estadísticas de `dbo.PruebaMantenimiento` "nunca actualizadas"; después de ejecutar la actualización — ambas con fecha real y `0` filas modificadas (estado "Al día").
+- Índices: antes — `IX_PruebaMantenimiento_valor` con 93.02 % de fragmentación (`REBUILD`), `PK__PruebaMa...` con 55.27 %; después de reconstruir el primero — `0 %` de fragmentación, acción recomendada "Sin acción necesaria".
+- Caso fallido: intento de actualizar estadísticas de `dbo.TablaQueNoExiste` mostró el error `La tabla dbo.TablaQueNoExiste no existe en esta base de datos.` de forma clara (sin romper la aplicación) y quedó registrado en el historial con `resultado = Fallido`.
+- Historial de mantenimiento (`monitoreo.RegistroMantenimiento`) verificado con 6 operaciones reales: 4 actualizaciones de estadísticas exitosas, 1 reconstrucción de índice exitosa, 1 actualización fallida controlada.
+- Evidencias capturadas en `evidencias/semana-08/` (10 capturas), incluyendo la detección del problema de permisos y del problema del `commit()`, no solo el resultado final.
+- **Semana 8 cerrada.** Pendiente para el equipo: las bitácoras de las Semanas 4, 6 y 7 siguen sin entrada en este archivo.
+
+
+
 ## Formato para futuras entradas
 
 ### Semana # — Nombre de la etapa
