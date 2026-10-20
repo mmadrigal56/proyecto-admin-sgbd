@@ -25,7 +25,7 @@ try:
 
         st.metric(
             "Último respaldo",
-            ultimo["fecha_finalizacion"].strftime("%d/%m/%Y %H:%M"),
+            ultimo["fecha_finalizacion"].strftime("%Y-%m-%d %H:%M"),
         )
         st.write(f"**Tipo:** {ultimo['tipo']}")
         st.write(f"**Tamaño:** {float(ultimo['tamano_mb']):.2f} MB")

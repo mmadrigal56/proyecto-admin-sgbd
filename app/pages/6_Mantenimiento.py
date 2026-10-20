@@ -216,4 +216,4 @@ except Exception as error:
     st.error("No fue posible consultar el historial de mantenimiento.")
     st.exception(error)
 
-st.caption(f"Última actualización de esta página: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+st.caption(f"Última actualización de esta página: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
