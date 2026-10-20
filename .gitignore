@@ -18,6 +18,7 @@ __pycache__/
 # Configuración local de IDE
 .vscode/
 .idea/
+.vs/
 
 # Archivos temporales
 *.tmp
