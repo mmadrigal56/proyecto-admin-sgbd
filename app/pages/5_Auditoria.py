@@ -9,8 +9,6 @@ from database.queries.auditoria import (
     obtener_objetos_problematicos
 )
 
-st.set_page_config(page_title="Módulo 5: Auditoría", page_icon="🔐", layout="wide")
-
 
 def consultar(obtener, mensaje_error):
     """
