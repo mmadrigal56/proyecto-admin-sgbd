@@ -93,6 +93,8 @@ try:
             f"Esto ejecutará UPDATE STATISTICS WITH FULLSCAN sobre **{seleccion}** "
             "en la base de datos real. No se puede deshacer, aunque no borra datos."
         )
+        if st.session_state.pop("reset_confirmar_estadisticas", False):
+            st.session_state["confirmar_estadisticas"] = False
         confirmar = st.checkbox(
             "Confirmo que deseo actualizar las estadísticas de esta tabla.",
             key="confirmar_estadisticas",
@@ -117,6 +119,7 @@ try:
                         "error",
                         f"No fue posible actualizar las estadísticas de {seleccion}: {error}",
                     )
+            st.session_state["reset_confirmar_estadisticas"] = True
             st.rerun()
 
 except Exception as error:
@@ -162,6 +165,8 @@ try:
             f"**{objetivo['esquema']}.{objetivo['tabla']} / {objetivo['indice']}** "
             "en la base de datos real."
         )
+        if st.session_state.pop("reset_confirmar_indice", False):
+            st.session_state["confirmar_indice"] = False
         confirmar_indice = st.checkbox(
             "Confirmo que deseo ejecutar este mantenimiento de índice.",
             key="confirmar_indice",
@@ -191,6 +196,7 @@ try:
                         "error",
                         f"No fue posible ejecutar el mantenimiento de índice: {error}",
                     )
+            st.session_state["reset_confirmar_indice"] = True
             st.rerun()
 
 except Exception as error:
