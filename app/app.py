@@ -1,37 +1,15 @@
 import streamlit as st
 
-from database.connection import get_connection
+st.set_page_config(page_title="Administración SGBD")
 
+paginas = [
+    st.Page("inicio.py", title="Inicio", default=True),
+    st.Page("pages/1_Estado_Instancia.py", title="Estado de la instancia"),
+    st.Page("pages/2_Rendimiento.py", title="Rendimiento"),
+    st.Page("pages/3_Almacenamiento.py", title="Almacenamiento"),
+    st.Page("pages/4_Respaldos.py", title="Respaldos"),
+    st.Page("pages/5_Auditoria.py", title="Auditoría"),
+    st.Page("pages/6_Mantenimiento.py", title="Mantenimiento"),
+]
 
-st.set_page_config(
-    page_title="Administración SGBD",
-    page_icon="🗄️",
-)
-
-st.title("Administración de Bases de Datos")
-st.subheader("Prueba de conexión")
-
-try:
-    with get_connection() as connection:
-        cursor = connection.cursor()
-
-        cursor.execute("""
-            SELECT
-                @@SERVERNAME AS servidor,
-                DB_NAME() AS base_actual,
-                @@VERSION AS version_sql_server;
-        """)
-
-        row = cursor.fetchone()
-
-    st.success("Conexión exitosa con SQL Server")
-
-    st.write(f"**Servidor:** {row.servidor}")
-    st.write(f"**Base de datos:** {row.base_actual}")
-
-    st.write("**Versión de SQL Server:**")
-    st.code(row.version_sql_server)
-
-except Exception as error:
-    st.error("No fue posible conectarse a SQL Server.")
-    st.exception(error)
+st.navigation(paginas).run()

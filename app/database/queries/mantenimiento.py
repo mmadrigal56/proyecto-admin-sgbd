@@ -70,7 +70,7 @@ _QUERY_INDICES_FRAGMENTADOS = """
 """
 
 _QUERY_HISTORIAL_MANTENIMIENTO = """
-    SELECT
+    SELECT TOP (50)
         fecha_hora,
         operacion,
         objeto,

@@ -58,29 +58,32 @@ _QUERY_PERMISOS = """
     ORDER BY GranteeName, ObjectName;
 """
 
+# referenced_id IS NULL indica que SQL Server no pudo resolver la referencia.
+# No se usa OBJECT_ID(referenced_entity_name): ese nombre viene sin esquema y
+# se buscaba en dbo, marcando como rotas las dependencias de otros esquemas.
 _QUERY_DEPENDENCIAS = """
-    SELECT 
+    SELECT DISTINCT
         obj.name AS ObjectName,
         obj.type_desc AS ObjectType,
         sed.referenced_entity_name AS MissingDependency
     FROM sys.sql_expression_dependencies sed
-    LEFT JOIN sys.objects obj ON sed.referencing_id = obj.object_id
-    WHERE OBJECT_ID(sed.referenced_entity_name) IS NULL 
+    JOIN sys.objects obj ON sed.referencing_id = obj.object_id
+    WHERE sed.referenced_id IS NULL
+      AND sed.referenced_database_name IS NULL
+      AND sed.referenced_server_name IS NULL
       AND sed.is_ambiguous = 0
     ORDER BY ObjectName;
 """
 
 
 def _ejecutar_consulta(query):
-    try:
-        with get_connection() as connection:
-            cursor = connection.cursor()
-            cursor.execute(query)
-            columnas = [columna[0] for columna in cursor.description]
-            return [dict(zip(columnas, fila)) for fila in cursor.fetchall()]
-    except Exception as e:
-        print(f"Error ejecutando consulta de auditoría: {e}")
-        return []
+    # Los errores se propagan a la página para mostrarlos al usuario.
+    # Antes se devolvía [] y un fallo parecía "sin resultados".
+    with get_connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(query)
+        columnas = [columna[0] for columna in cursor.description]
+        return [dict(zip(columnas, fila)) for fila in cursor.fetchall()]
 
 def obtener_logins():
     return _ejecutar_consulta(_QUERY_LOGINS)

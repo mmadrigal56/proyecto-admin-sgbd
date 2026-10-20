@@ -29,10 +29,9 @@ st.subheader("Servidor e instancia")
 try:
     info = obtener_servidor_instancia()
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Servidor", info["servidor"])
-    col2.metric("Instancia", info["instancia"])
-    col3.metric("Edición", info["edicion"])
+    st.write(f"**Servidor:** {info['servidor']}")
+    st.write(f"**Instancia:** {info['instancia']}")
+    st.write(f"**Edición:** {info['edicion']}")
 
     st.write(f"**Versión del producto:** {info['version_producto']}")
     st.write(f"**Nivel del producto (Service Pack/CU):** {info['nivel_producto']}")
@@ -57,12 +56,11 @@ try:
 
     st.success("La instancia está en línea y respondiendo consultas.")
 
-    col1, col2 = st.columns(2)
-    col1.metric("Fecha y hora de inicio", str(actividad["fecha_inicio"]))
+    st.write(f"**Fecha y hora de inicio:** {actividad['fecha_inicio']:%Y-%m-%d %H:%M:%S}")
     horas = actividad["horas_actividad"]
     dias = horas // 24
     horas_restantes = horas % 24
-    col2.metric("Tiempo de actividad", f"{dias} días, {horas_restantes} horas")
+    st.metric("Tiempo de actividad", f"{dias} días, {horas_restantes} horas")
 
 except Exception as error:
     st.error(
@@ -114,7 +112,7 @@ try:
     if not bases:
         st.info("La instancia no reporta bases de datos visibles para este usuario.")
     else:
-        st.dataframe(bases, use_container_width=True)
+        st.dataframe(bases, width="stretch")
 
 except Exception as error:
     st.error("No fue posible listar las bases de datos administradas.")

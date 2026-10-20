@@ -198,6 +198,47 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - Evidencias capturadas en `evidencias/semana-08/` (10 capturas), incluyendo la detección del problema de permisos y del problema del `commit()`, no solo el resultado final.
 - **Semana 8 cerrada.** Pendiente para el equipo: las bitácoras de las Semanas 4, 6 y 7 siguen sin entrada en este archivo.
 
+### Semana 9 — Integración y pruebas
+
+**Periodo:** 20 de octubre de 2026
+**Responsable:** Nicky
+
+**Nota de continuidad:** se revisó `Andrey_semana8.md` (traspaso del Módulo 6) y el cronograma maestro, sección "Semana 9 — Nicky: integración y pruebas". Se respetó lo indicado por Andrey: no se modificaron los procedimientos de mantenimiento ni la decisión REBUILD/REORGANIZE.
+
+**Actividades realizadas:**
+
+- Se creó la rama `semana9/integracion` a partir de `main`.
+- Se integraron los seis módulos en una sola aplicación: `app/app.py` usa `st.navigation` con 7 páginas (Inicio + 6 módulos) y se agregó `app/inicio.py` con la prueba de conexión y la lista de módulos.
+- Se unificó el diseño: encabezado "Módulo N — Nombre" con descripción, botón "Actualizar información" y hora de actualización; formato de fecha AAAA-MM-DD; tablas sin columna de índice; encabezados de tablas en español; `width="stretch"` en lugar de `use_container_width`.
+- Se revisaron las consultas y el manejo de conexiones: el historial de mantenimiento se limitó a las 50 operaciones más recientes; no se encontraron fugas de conexiones.
+- Se ejecutaron las 9 pruebas planificadas (conexión correcta e incorrecta, consultas sin resultados, permisos insuficientes, servidor detenido, bloqueo real, objeto problemático, mantenimiento exitoso y fallido), todas aprobadas, con 26 evidencias.
+- Se redactaron el informe de pruebas, la lista de defectos y `Nicky_semana9.md`.
+
+**Decisiones tomadas:**
+
+- Se usó `st.navigation` en lugar del descubrimiento automático de `pages/` para controlar el nombre y el orden del menú.
+- Para simular una conexión incorrecta se usó una variable de entorno, sin tocar `config/.env` ni probar una contraseña errónea, para no bloquear el login.
+- No se cambiaron los textos del Módulo 6 como "Sin accion necesaria", porque la lógica los compara y cambiarlos implica tocar consulta y lógica a la vez.
+
+**Problemas encontrados:**
+
+- Auditoría mostraba un error de consulta como lista vacía (D-11) y no veía todos los logins por falta de permiso de metadatos (D-10).
+- La consulta de dependencias rotas devolvía falsos positivos (D-15).
+- En el Módulo 6, la casilla de confirmación quedaba marcada después de ejecutar un mantenimiento (D-17).
+
+**Soluciones aplicadas:**
+
+- Auditoría ahora muestra el error en pantalla (D-11) y se agregó `sql/05-auditoria/00_otorgar_permisos_auditoria.sql` con `VIEW ANY DEFINITION` (D-10).
+- La consulta de dependencias se reescribió para detectar solo dependencias realmente rotas (D-15).
+- La casilla de confirmación se desmarca sola después de cada ejecución (D-17).
+
+**Resultados y pendientes:**
+
+- **Probado con SQL Server real**, instancia `Nicky\SQLEXPRESS`: 9 de 9 pruebas aprobadas; evidencias en `evidencias/semana-09/` (26 capturas), con `informe_pruebas.md`, `lista_defectos.md` y `Nicky_semana9.md`.
+- Los defectos corregidos tienen un commit cada uno en la rama `semana9/integracion` (detalle en `lista_defectos.md`).
+- Pendientes menores: valores sin tildes en el Módulo 6 (por la lógica que los compara) y cierre explícito de conexiones como recomendación.
+- **Semana 9 cerrada**; la rama `semana9/integracion` es el release candidate, en el Pull Request #13 pendiente de revisión del equipo.
+
 
 
 ## Formato para futuras entradas
