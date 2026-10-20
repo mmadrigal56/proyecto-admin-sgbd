@@ -47,7 +47,7 @@ with tab1:
         pass
     elif datos_logins:
         df_logins = pd.DataFrame(datos_logins)
-        st.dataframe(df_logins, use_container_width=True)
+        st.dataframe(df_logins, width="stretch")
     else:
         st.info("La consulta no devolvió logins visibles para el usuario actual.")
 
@@ -57,7 +57,7 @@ with tab1:
         pass
     elif datos_usuarios:
         df_usuarios = pd.DataFrame(datos_usuarios)
-        st.dataframe(df_usuarios, use_container_width=True)
+        st.dataframe(df_usuarios, width="stretch")
     else:
         st.info("La consulta no devolvió usuarios visibles para el usuario actual.")
 
@@ -70,7 +70,7 @@ with tab2:
             pass
         elif datos_roles_srv:
             df_roles_srv = pd.DataFrame(datos_roles_srv)
-            st.dataframe(df_roles_srv, use_container_width=True)
+            st.dataframe(df_roles_srv, width="stretch")
         else:
             st.info("La consulta no devolvió roles de servidor visibles para el usuario actual.")
             
@@ -81,7 +81,7 @@ with tab2:
             pass
         elif datos_roles_bd:
             df_roles_bd = pd.DataFrame(datos_roles_bd)
-            st.dataframe(df_roles_bd, use_container_width=True)
+            st.dataframe(df_roles_bd, width="stretch")
         else:
             st.info("La consulta no devolvió roles de base de datos visibles para el usuario actual.")
 
@@ -104,7 +104,7 @@ with tab3:
         if filtro_permiso:
             df_filtrado = df_filtrado[df_filtrado['Permission'].isin(filtro_permiso)]
             
-        st.dataframe(df_filtrado, use_container_width=True)
+        st.dataframe(df_filtrado, width="stretch")
     else:
         st.info("La consulta no devolvió permisos visibles para el usuario actual.")
 
@@ -120,7 +120,7 @@ with tab4:
     elif datos_prob:
         df_prob = pd.DataFrame(datos_prob)
         st.error("¡Se detectaron objetos con dependencias rotas!")
-        st.dataframe(df_prob, use_container_width=True)
+        st.dataframe(df_prob, width="stretch")
     else:
         # Solo se llega aquí si la consulta se ejecutó correctamente.
         st.success("No se detectaron objetos con dependencias rotas.")

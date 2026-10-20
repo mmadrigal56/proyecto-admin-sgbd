@@ -114,7 +114,7 @@ try:
     if not bases:
         st.info("La instancia no reporta bases de datos visibles para este usuario.")
     else:
-        st.dataframe(bases, use_container_width=True)
+        st.dataframe(bases, width="stretch")
 
 except Exception as error:
     st.error("No fue posible listar las bases de datos administradas.")
