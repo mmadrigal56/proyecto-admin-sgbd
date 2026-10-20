@@ -12,6 +12,39 @@ from database.queries.auditoria import (
 )
 
 
+# Encabezados en español para mostrar en las tablas. Solo cambian lo que se
+# ve: los nombres internos de las columnas (usados en los filtros) no cambian.
+COLUMNAS_LOGINS = {
+    "LoginName": "Login",
+    "LoginType": "Tipo",
+    "IsDisabled": "Deshabilitado",
+    "CreateDate": "Fecha de creación",
+}
+COLUMNAS_USUARIOS = {
+    "UserName": "Usuario",
+    "UserType": "Tipo",
+    "AuthType": "Autenticación",
+    "CreateDate": "Fecha de creación",
+}
+COLUMNAS_ROLES = {
+    "RoleName": "Rol",
+    "MemberName": "Miembro",
+}
+COLUMNAS_PERMISOS = {
+    "ObjectType": "Tipo de objeto",
+    "ObjectName": "Objeto",
+    "Permission": "Permiso",
+    "State": "Estado",
+    "GranteeName": "Usuario o rol",
+    "GranteeType": "Tipo de usuario o rol",
+}
+COLUMNAS_DEPENDENCIAS = {
+    "ObjectName": "Objeto",
+    "ObjectType": "Tipo de objeto",
+    "MissingDependency": "Dependencia faltante",
+}
+
+
 def consultar(obtener, mensaje_error):
     """
     Ejecuta una consulta del módulo. Si falla, muestra el error en rojo
@@ -47,7 +80,7 @@ with tab1:
         pass
     elif datos_logins:
         df_logins = pd.DataFrame(datos_logins)
-        st.dataframe(df_logins, width="stretch", hide_index=True)
+        st.dataframe(df_logins, width="stretch", hide_index=True, column_config=COLUMNAS_LOGINS)
     else:
         st.info("La consulta no devolvió logins visibles para el usuario actual.")
 
@@ -57,7 +90,7 @@ with tab1:
         pass
     elif datos_usuarios:
         df_usuarios = pd.DataFrame(datos_usuarios)
-        st.dataframe(df_usuarios, width="stretch", hide_index=True)
+        st.dataframe(df_usuarios, width="stretch", hide_index=True, column_config=COLUMNAS_USUARIOS)
     else:
         st.info("La consulta no devolvió usuarios visibles para el usuario actual.")
 
@@ -70,7 +103,7 @@ with tab2:
             pass
         elif datos_roles_srv:
             df_roles_srv = pd.DataFrame(datos_roles_srv)
-            st.dataframe(df_roles_srv, width="stretch", hide_index=True)
+            st.dataframe(df_roles_srv, width="stretch", hide_index=True, column_config=COLUMNAS_ROLES)
         else:
             st.info("La consulta no devolvió roles de servidor visibles para el usuario actual.")
             
@@ -81,7 +114,7 @@ with tab2:
             pass
         elif datos_roles_bd:
             df_roles_bd = pd.DataFrame(datos_roles_bd)
-            st.dataframe(df_roles_bd, width="stretch", hide_index=True)
+            st.dataframe(df_roles_bd, width="stretch", hide_index=True, column_config=COLUMNAS_ROLES)
         else:
             st.info("La consulta no devolvió roles de base de datos visibles para el usuario actual.")
 
@@ -104,7 +137,7 @@ with tab3:
         if filtro_permiso:
             df_filtrado = df_filtrado[df_filtrado['Permission'].isin(filtro_permiso)]
             
-        st.dataframe(df_filtrado, width="stretch", hide_index=True)
+        st.dataframe(df_filtrado, width="stretch", hide_index=True, column_config=COLUMNAS_PERMISOS)
     else:
         st.info("La consulta no devolvió permisos visibles para el usuario actual.")
 
@@ -120,7 +153,7 @@ with tab4:
     elif datos_prob:
         df_prob = pd.DataFrame(datos_prob)
         st.error("¡Se detectaron objetos con dependencias rotas!")
-        st.dataframe(df_prob, width="stretch", hide_index=True)
+        st.dataframe(df_prob, width="stretch", hide_index=True, column_config=COLUMNAS_DEPENDENCIAS)
     else:
         # Solo se llega aquí si la consulta se ejecutó correctamente.
         st.success("No se detectaron objetos con dependencias rotas.")
