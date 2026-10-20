@@ -72,15 +72,13 @@ _QUERY_DEPENDENCIAS = """
 
 
 def _ejecutar_consulta(query):
-    try:
-        with get_connection() as connection:
-            cursor = connection.cursor()
-            cursor.execute(query)
-            columnas = [columna[0] for columna in cursor.description]
-            return [dict(zip(columnas, fila)) for fila in cursor.fetchall()]
-    except Exception as e:
-        print(f"Error ejecutando consulta de auditoría: {e}")
-        return []
+    # Los errores se propagan a la página para mostrarlos al usuario.
+    # Antes se devolvía [] y un fallo parecía "sin resultados".
+    with get_connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(query)
+        columnas = [columna[0] for columna in cursor.description]
+        return [dict(zip(columnas, fila)) for fila in cursor.fetchall()]
 
 def obtener_logins():
     return _ejecutar_consulta(_QUERY_LOGINS)
