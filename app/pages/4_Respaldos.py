@@ -5,6 +5,15 @@ from database.queries.respaldos import obtener_historial_respaldos
 
 
 st.title("Módulo 4 — Respaldos y recuperación")
+st.caption(
+    "Historial de respaldos registrado por SQL Server (msdb) para la base "
+    "de datos de la conexión: se muestran los 20 más recientes."
+)
+
+if st.button("Actualizar información"):
+    st.rerun()
+
+st.divider()
 
 try:
     respaldos = obtener_historial_respaldos()
@@ -49,3 +58,5 @@ try:
 except Exception as error:
     st.error("No fue posible consultar los respaldos.")
     st.exception(error)
+
+st.caption(f"Última actualización de esta página: {datetime.now():%Y-%m-%d %H:%M:%S}")
