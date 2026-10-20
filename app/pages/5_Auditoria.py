@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import streamlit as st
 import pandas as pd
 from database.queries.auditoria import (
@@ -24,8 +26,17 @@ def consultar(obtener, mensaje_error):
         return None, False
 
 
-st.title("🔐 Módulo 5: Auditoría")
-st.markdown("Consulta información de seguridad: logins, usuarios, roles, privilegios y objetos problemáticos del SGBD.")
+st.title("Módulo 5 — Auditoría")
+st.caption(
+    "Información de seguridad obtenida directamente de la instancia de "
+    "SQL Server configurada en config/.env: logins, usuarios, roles, "
+    "permisos y objetos con dependencias rotas."
+)
+
+if st.button("Actualizar información"):
+    st.rerun()
+
+st.divider()
 
 tab1, tab2, tab3, tab4 = st.tabs(["Logins y Usuarios", "Roles y Miembros", "Permisos", "Objetos Problemáticos"])
 
@@ -113,3 +124,5 @@ with tab4:
     else:
         # Solo se llega aquí si la consulta se ejecutó correctamente.
         st.success("No se detectaron objetos con dependencias rotas.")
+
+st.caption(f"Última actualización de esta página: {datetime.now():%Y-%m-%d %H:%M:%S}")
