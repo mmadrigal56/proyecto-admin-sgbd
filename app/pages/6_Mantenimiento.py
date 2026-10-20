@@ -234,6 +234,7 @@ st.divider()
 # Sección 4 — Historial de mantenimiento
 # =============================================================
 st.header("4. Historial de mantenimiento")
+st.caption("Se muestran las 50 operaciones más recientes.")
 
 try:
     historial = obtener_historial_mantenimiento()
