@@ -66,6 +66,7 @@ try:
         st.dataframe(
             df_consultas,
             width="stretch",
+            hide_index=True,
             column_config={
                 "veces_ejecutada": "Veces ejecutada",
                 "cpu_total_ms": st.column_config.NumberColumn("CPU total (ms)", format="%.2f"),
@@ -113,6 +114,7 @@ try:
         st.dataframe(
             df_sesiones,
             width="stretch",
+            hide_index=True,
             column_config={
                 "id_sesion": "ID sesión",
                 "usuario": "Usuario",
@@ -153,6 +155,7 @@ try:
         st.dataframe(
             df_bloqueos,
             width="stretch",
+            hide_index=True,
             column_config={
                 "sesion_bloqueada": "Sesión bloqueada",
                 "sesion_bloqueadora": "Sesión bloqueadora",
