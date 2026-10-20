@@ -29,6 +29,35 @@ def _mostrar_mensaje_pendiente(clave):
         getattr(st, tipo)(texto)
 
 
+# Encabezados en español para mostrar en las tablas. Solo cambian lo que se
+# ve: los nombres internos de las columnas (usados por la lógica) no cambian.
+COLUMNAS_ESTADISTICAS = {
+    "esquema": "Esquema",
+    "tabla": "Tabla",
+    "estadistica": "Estadística",
+    "fecha_ultima_actualizacion": "Última actualización",
+    "filas_en_la_muestra": "Filas en la muestra",
+    "filas_modificadas_desde_entonces": "Filas modificadas desde entonces",
+    "porcentaje_modificado": "% modificado",
+    "estado": "Estado",
+}
+COLUMNAS_INDICES = {
+    "esquema": "Esquema",
+    "tabla": "Tabla",
+    "indice": "Índice",
+    "porcentaje_fragmentacion": "% de fragmentación",
+    "paginas": "Páginas",
+    "accion_recomendada": "Acción recomendada",
+}
+COLUMNAS_HISTORIAL = {
+    "fecha_hora": "Fecha y hora",
+    "operacion": "Operación",
+    "objeto": "Objeto",
+    "usuario_login": "Usuario",
+    "resultado": "Resultado",
+    "detalle": "Detalle",
+}
+
 st.title("Módulo 6 — Mantenimiento preventivo")
 
 st.caption(
@@ -51,7 +80,7 @@ try:
     if not estadisticas:
         st.info("No se encontraron estadísticas en el esquema dbo.")
     else:
-        st.dataframe(estadisticas, hide_index=True)
+        st.dataframe(estadisticas, hide_index=True, column_config=COLUMNAS_ESTADISTICAS)
 
         opciones = [f"{e['esquema']}.{e['tabla']}" for e in estadisticas]
         seleccion = st.selectbox(
@@ -111,9 +140,9 @@ try:
         st.info("No se encontraron índices con datos para evaluar.")
     elif not indices_con_accion:
         st.success("Ningún índice necesita mantenimiento en este momento (todos por debajo de 5% de fragmentación).")
-        st.dataframe(indices, hide_index=True)
+        st.dataframe(indices, hide_index=True, column_config=COLUMNAS_INDICES)
     else:
-        st.dataframe(indices, hide_index=True)
+        st.dataframe(indices, hide_index=True, column_config=COLUMNAS_INDICES)
 
         etiquetas = [
             f"{i['esquema']}.{i['tabla']} / {i['indice']} "
@@ -211,7 +240,7 @@ try:
     if not historial:
         st.info("Todavía no se ha registrado ninguna operación de mantenimiento.")
     else:
-        st.dataframe(historial, hide_index=True)
+        st.dataframe(historial, hide_index=True, column_config=COLUMNAS_HISTORIAL)
 except Exception as error:
     st.error("No fue posible consultar el historial de mantenimiento.")
     st.exception(error)
