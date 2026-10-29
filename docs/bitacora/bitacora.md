@@ -57,6 +57,25 @@
 Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python para mantenimiento. Esta alternativa se sustituyó por una aplicación web local desarrollada completamente con Python y Streamlit, debido a que facilita la integración de los seis módulos en una misma interfaz.
 
 
+### Semana 2 — Instalación, configuración y conexión
+
+**Periodo:** 1 de septiembre de 2026 (fecha de los commits)  
+**Responsable:** Javier
+
+> Entrada redactada en la semana 10 a partir del historial de Git (commits `837484f` y `a89ac50`, PR #3); la semana no tenía entrada en esta bitácora ni archivo de continuidad propio.
+
+**Actividades realizadas:**
+
+- Se creó la base `BD_AdminSGBD` y el usuario consultivo `adminsgbd_consulta` (`sql/00-configuracion/`).
+- Se implementó la conexión con `pyodbc` en `app/database/connection.py`, leyendo los parámetros desde `config/.env`.
+- Se creó una aplicación Streamlit mínima con una consulta real (`@@SERVERNAME`, `@@VERSION`).
+- Se agregaron `requirements.txt`, `config/.env.example`, `.gitignore`, `test_connection.py`, `test_permissions.py` y el manual de instalación.
+
+**Problemas detectados después:**
+
+- El manual no indicaba activar la autenticación mixta (detectado en la semana 4).
+- `requirements.txt` fijaba una versión de `numpy` incompatible con Python 3.11 (corregido en la semana 3).
+
 ### Semana 3 — Módulo 1: estado general de la instancia
 
 **Periodo:** 13 de setiembre de 2026
@@ -107,6 +126,26 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - Evidencias capturadas en `evidencias/semana-03/`, incluyendo la prueba de error controlado (servicio de SQL Server detenido): las 4 secciones mostraron errores claros e independientes sin caer la aplicación, y todo volvió a la normalidad al reiniciar el servicio.
 - **Semana 3 cerrada.** Pendiente para el equipo: decidir si se fija `numpy==2.2.6` en `requirements.txt` para todos, o si se estandariza la versión de Python del equipo a 3.12+.
 
+### Semana 4 — Módulo 2: monitoreo de rendimiento
+
+**Periodo:** 17 de septiembre de 2026  
+**Responsable:** Nicky
+
+> Entrada redactada en la semana 10 a partir del historial de Git y d`evidencias/semana-04/Nicky_semana4.md`; la semana no tenía entrada en esta bitácora.
+
+**Actividades realizadas:**
+
+- Consultas de las 10 sentencias de mayor consumo (`sys.dm_exec_query_stats`), sesiones activas (`sys.dm_exec_sessions`) y sesiones bloqueadas (`sys.dm_exec_requests`).
+- Página `app/pages/2_Rendimiento.py` con ordenamiento por métrica y filtro por estado.
+- Escenario de bloqueo reproducible (`sql/02-rendimiento/preparar_escenario_bloqueo.sql`), liberado con `ROLLBACK`.
+
+**Problemas y soluciones:**
+
+- `Login failed (18456)`: la instancia estaba en modo solo Windows; se activó la autenticación mixta.
+- El Bloc de notas no guardaba `config/.env`; se editó con PowerShell.
+
+**Resultados:** bloqueo real detectado (sesión 82 bloqueada por 87, `LCK_M_S`); 8 capturas en `evidencias/semana-04/`. **Semana 4 cerrada.**
+
 ### Semana 5 — Módulo 3: gestión del almacenamiento
 
 **Periodo:** 24 – 25 de septiembre de 2026  
@@ -146,6 +185,43 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - 25/9: la tarea programada midió sola a las 09:55; tras una segunda carga de 20 000 filas, el historial muestra 6 mediciones en dos fechas (datos utilizados 4.38 → 32.56 MB, +28.18 MB). M3-12 completado.
 - **Semana 5 cerrada.**
 - Pendiente detectado: la Semana 4 no tiene entrada en esta bitácora (sí tiene `Nicky_semana4.md`).
+
+### Semana 6 — Módulo 4: respaldo y recuperación
+
+**Periodo:** 29 de septiembre de 2026  
+**Responsable:** Mariana
+
+> Entrada redactada en la semana 10 a partir del historial de Git y d`evidencias/semana-06/Mar_semana6.md`; la semana no tenía entrada en esta bitácora.
+
+**Actividades realizadas:**
+
+- Consulta del historial de respaldos en `msdb.dbo.backupset` y `msdb.dbo.backupmediafamily` (`app/database/queries/respaldos.py`).
+- Página `app/pages/4_Respaldos.py` con último respaldo, tipo, tamaño, estado, antigüedad e historial.
+- Scripts `sql/04-respaldos/crear_respaldo.sql`, `consultas_respaldos.sql` y `recuperacion_prueba.sql`.
+- Respaldo completo con `CHECKSUM`, verificación con `RESTORE VERIFYONLY` y restauración de prueba en `BD_AdminSGBD_PruebaRestauracion`.
+
+**Decisiones tomadas:**
+
+- La antigüedad del último respaldo se marca como advertencia después de 24 horas.
+- La restauración de prueba se hace sobre otra base, nunca sobre la original.
+
+**Resultados:** dos respaldos reales mostrados en la página; restauración de prueba `ONLINE`. Evidencias en `evidencias/semana-06/`. **Semana 6 cerrada** (PR #10).
+
+### Semana 7 — Módulo 5: auditoría
+
+**Periodo:** 6 al 7 de octubre de 2026  
+**Responsable:** Javier
+
+> Entrada redactada en la semana 10 a partir del historial de Git y d`evidencias/semana-07/Javi_semana7.md`; la semana no tenía entrada en esta bitácora.
+
+**Actividades realizadas:**
+
+- Consultas de logins, usuarios, roles de servidor y de base, permisos y dependencias rotas (`sql/05-auditoria/01_` a `04_`, `app/database/queries/auditoria.py`).
+- Página `app/pages/5_Auditoria.py` con pestañas y filtros por usuario/rol y permiso.
+
+**Problemas detectados después (semana 9):** errores de consulta mostrados como listas vacías (D-11), logins incompletos por falta de `VIEW ANY DEFINITION` (D-10) y falsos positivos en dependencias (D-15); los tres se corrigieron en la semana 9.
+
+**Resultados:** módulo integrado en `main` (PR #11). **Semana 7 cerrada.**
 
 ### Semana 8 — Módulo 6: mantenimiento preventivo
 
@@ -240,6 +316,32 @@ Inicialmente se consideró utilizar Power BI como interfaz consultiva y Python p
 - **Semana 9 cerrada**; la rama `semana9/integracion` es el release candidate, en el Pull Request #13 pendiente de revisión del equipo.
 
 
+
+### Semana 10 — Documentación, presentación y entrega
+
+**Periodo:** 28 de octubre al 3 de noviembre de 2026  
+**Responsable:** Juan
+
+**Nota de continuidad:** se revisaron `Nicky_semana9.md`, el informe de pruebas, la lista de defectos y el cronograma maestro, sección "Semana 10". No se encontraron contradicciones.
+
+**Actividades realizadas:**
+
+- Se reescribió el `README.md` con la descripción final, inicio rápido, seguridad, documentación y estructura real del repositorio.
+- Se reescribió el manual de instalación con todos los scripts en orden, las variables administrativas y la solución de problemas encontrados por el equipo.
+- Se crearon el manual de usuario (`docs/manuales/usuario.md`) y el manual técnico (`docs/tecnica/manual-tecnico.md`).
+- Se actualizó la arquitectura a su estado final y se agregaron `DB_ADMIN_USER` y `DB_ADMIN_PASSWORD` a `config/.env.example` (solo existían en el `.env` local de cada integrante).
+- Se actualizó la matriz de requerimientos con estado y evidencia de cada requisito.
+- Se agregaron a esta bitácora las entradas faltantes de las semanas 2, 4, 6 y 7.
+- Se revisó el historial completo del repositorio: no contiene contraseñas reales ni `config/.env`.
+
+**Decisiones tomadas:**
+
+- La matriz marca **M6-04** como pendiente y **M5-06** como parcial, en lugar de darlos por cumplidos sin evidencia.
+- Solo se corrigió documentación; no se modificó código en esta semana.
+
+**Resultados y pendientes:**
+
+- Pendientes de la semana: ensayo cronometrado, verificación final un día antes, etiqueta de versión `v1.0` y publicación del enlace en el aula virtual (ver `evidencias/semana-10/Juan_semana10.md`).
 
 ## Formato para futuras entradas
 

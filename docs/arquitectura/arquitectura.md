@@ -2,9 +2,9 @@
 
 ## Descripción general
 
-El proyecto se desarrollará como una aplicación web local para el monitoreo, administración y auditoría de Microsoft SQL Server.
+El proyecto es una aplicación web local para el monitoreo, administración y auditoría de Microsoft SQL Server.
 
-La aplicación utilizará Python y Streamlit para integrar los seis módulos requeridos dentro de una misma interfaz. La información se obtendrá directamente desde SQL Server mediante consultas administrativas y se procesará antes de presentarse mediante indicadores, tablas y gráficos.
+La aplicación utiliza Python y Streamlit para integrar los seis módulos requeridos dentro de una misma interfaz. La información se obtiene directamente desde SQL Server mediante consultas administrativas y se procesa antes de presentarse mediante indicadores, tablas y gráficos.
 
 ## Tecnologías seleccionadas
 
@@ -34,7 +34,7 @@ flowchart TD
 
 ### Capa de presentación
 
-Será implementada con Streamlit y se encargará de:
+Implementada con Streamlit (`app/app.py`, `app/inicio.py` y `app/pages/`). Se encarga de:
 
 - Mostrar el menú principal.
 - Permitir la navegación entre los seis módulos.
@@ -44,7 +44,7 @@ Será implementada con Streamlit y se encargará de:
 
 ### Capa de lógica
 
-Se encargará de:
+Ubicada en `app/services/` y en las funciones de cada página. Se encarga de:
 
 - Procesar los resultados obtenidos de SQL Server.
 - Calcular métricas e indicadores.
@@ -55,7 +55,7 @@ Se encargará de:
 
 ### Capa de acceso a datos
 
-Se encargará de:
+Ubicada en `app/database/connection.py` y `app/database/queries/`. Se encarga de:
 
 - Administrar la conexión con SQL Server.
 - Ejecutar consultas administrativas.
@@ -65,7 +65,7 @@ Se encargará de:
 
 ### Sistema gestor de bases de datos
 
-Microsoft SQL Server proporcionará:
+Microsoft SQL Server proporciona:
 
 - Información de la instancia.
 - Métricas de rendimiento.
@@ -76,7 +76,7 @@ Microsoft SQL Server proporcionará:
 
 ## Módulos funcionales
 
-La aplicación integrará los siguientes módulos:
+La aplicación integra los siguientes módulos:
 
 1. Estado general de la instancia.
 2. Monitoreo de rendimiento.
@@ -85,27 +85,27 @@ La aplicación integrará los siguientes módulos:
 5. Auditoría.
 6. Mantenimiento preventivo.
 
-Todos los módulos estarán disponibles desde el menú principal de Streamlit.
+Todos los módulos están disponibles desde el menú principal de Streamlit (`st.navigation`).
 
 ## Conexiones y permisos
 
-La solución diferenciará entre:
+La solución diferencia entre:
 
-- Una conexión consultiva con permisos limitados para obtener información administrativa.
-- Una conexión administrativa utilizada únicamente para las operaciones de mantenimiento autorizadas.
+- Una conexión consultiva (`adminsgbd_consulta`, `get_connection()`) con permisos de solo lectura para obtener información administrativa.
+- Una conexión administrativa (`adminsgbd_mantenimiento`, `get_admin_connection()`, rol `db_ddladmin`) utilizada únicamente para las operaciones de mantenimiento del Módulo 6, después de una confirmación explícita.
 
-Las credenciales reales no se almacenarán en el código ni en el repositorio. La configuración utilizará variables de entorno o archivos locales excluidos mediante `.gitignore`.
+Las credenciales reales no se almacenan en el código ni en el repositorio: viven en `config/.env`, excluido mediante `.gitignore`. El detalle de permisos está en el [manual técnico](../tecnica/manual-tecnico.md#5-modelo-de-seguridad-y-permisos).
 
-## Ejecución prevista
+## Ejecución
 
-La aplicación se iniciará localmente mediante:
+La aplicación se inicia localmente mediante:
 
 ```powershell
-streamlit run app.py
+streamlit run app/app.py
 ```
 
-Streamlit iniciará un servidor web local y abrirá la interfaz en el navegador. La aplicación se conectará a la instancia de SQL Server configurada por el usuario.
+Streamlit inicia un servidor web local y abre la interfaz en el navegador (`http://localhost:8501`). La aplicación se conecta a la instancia de SQL Server configurada en `config/.env`.
 
 ## Estado de la arquitectura
 
-Esta arquitectura constituye la propuesta inicial del equipo. Podrá ajustarse durante el desarrollo cuando exista una justificación técnica, dejando registro del cambio en la documentación y la bitácora.
+La arquitectura propuesta en la semana 1 se mantuvo durante todo el desarrollo. Los ajustes posteriores se documentaron en la bitácora: carpeta `app/services/` para la lógica del Módulo 3 (semana 5), conexión administrativa separada (semana 8) y menú con `st.navigation` (semana 9). La descripción detallada del código está en el [manual técnico](../tecnica/manual-tecnico.md).
