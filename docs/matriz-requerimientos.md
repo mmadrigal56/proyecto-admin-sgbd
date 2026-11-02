@@ -141,7 +141,7 @@ Los módulos definidos son:
 
 | ID | Requerimiento | Criterio de aceptación | Estado | Evidencia |
 |---|---|---|---|---|
-| REP-01 | Mantener un repositorio accesible y completo | El enlace funciona y contiene el código, los scripts, la documentación y la presentación | En proceso | Código, `sql/` y `docs/` completos; falta agregar la presentación final |
+| REP-01 | Mantener un repositorio accesible y completo | El enlace funciona y contiene el código, los scripts, la documentación y la presentación | Completado | Código, `sql/`, `docs/` y presentación en `docs/presentacion/`; versión final etiquetada `v1.0` |
 | REP-02 | Evidenciar un historial progresivo | Los cambios se distribuyen durante el periodo de desarrollo y no se concentran únicamente al final | Completado | Commits del 29 de agosto al 28 de octubre de 2026, distribuidos por semana |
 | REP-03 | Identificar los aportes individuales | Los commits permiten reconocer claramente a la persona responsable de cada cambio | Completado | Commits desde las cuentas personales de cada integrante |
 | REP-04 | Garantizar la participación del grupo | Todos los integrantes presentan aportes relevantes y verificables | Completado | Los cinco integrantes tienen commits y archivo de continuidad |
