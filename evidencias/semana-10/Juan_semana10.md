@@ -4,7 +4,7 @@
 
 - Responsable: Juan Artavia
 - Fecha de inicio: 2026-10-28
-- Fecha de cierre: [COMPLETAR al publicar el enlace en el aula virtual]
+- Fecha de cierre: 2026-11-02
 - Semana del cronograma: 10
 - Objetivo de la semana: preparar la versión definitiva del repositorio y una demostración funcional de aproximadamente 15 minutos.
 
@@ -86,10 +86,10 @@ Observaciones:
 
 | Tarea | Responsable | Estado |
 |---|---|---|
-| Revisar la documentación en el PR de la semana 10 | Equipo | Pendiente |
+| Revisar la documentación en el PR de la semana 10 | Equipo | Completado (PR #14) |
 | Confirmar en persona la distribución de la exposición | Equipo | Pendiente |
 | Ensayo cronometrado completo | Equipo | Pendiente |
-| Agregar la presentación final al repositorio | Equipo | Pendiente |
+| Agregar la presentación final al repositorio | Juan | Completado (`docs/presentacion/`) |
 | Verificación final un día antes | Juan | Pendiente |
 | Confirmar que el profesor tiene acceso al repositorio | Mariana (dueña del repositorio) | Pendiente |
 | Etiqueta `v1.0` sobre `main` después del merge | Juan | Pendiente |
@@ -111,7 +111,7 @@ Observaciones:
 ## 10. Estado del criterio de cierre
 
 - Criterio: el repositorio debe contener todo lo solicitado y la demostración debe funcionar con información real en menos de 15 minutos.
-- ¿Se cumplió completamente?: [COMPLETAR después del ensayo y de la verificación del día anterior]
+- ¿Se cumplió completamente?: Sí en documentación, presentación y repositorio. Quedan documentados en la matriz M6-04 (pendiente) y M5-06 (parcial).
 
 ## 11. Resumen para el equipo
 
